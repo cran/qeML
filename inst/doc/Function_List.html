@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Function List</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Function List</h1>
+
+
+
+<ul>
+<li><p><em>ML algorithms</em></p>
+<ul>
+<li><p><strong>qeAdaBoost()</strong>: Ada Boosting, wraps
+<strong>Jousboost</strong> pkg</p></li>
+<li><p><strong>qeDeepnet()</strong>: wraps <strong>deepnet</strong>
+pkg</p></li>
+<li><p><strong>qeDT()</strong>: decision trees, wraps
+<strong>party</strong> pkg</p></li>
+<li><p><strong>qeGBoost()</strong>: gradient boosting, wraps
+<strong>gbm</strong> pkg</p></li>
+<li><p><strong>qeKNN()</strong>: k-Nearest Neighbors, wraps
+<strong>regtools</strong> pkg; includes predictor importance settings;
+allows linear interpolation within a bin</p></li>
+<li><p><strong>qeLASSO()</strong>: LASSO and ridge regression, wraps
+<strong>glmment</strong> pkg</p></li>
+<li><p><strong>qeLightGBoost()</strong>: gradient boosting, wraps
+<strong>lightgbm</strong> pkg</p></li>
+<li><p><strong>qeliquidSVM</strong>: wraps liquidSVM pkg</p></li>
+<li><p><strong>qeLin()</strong>: wraps R’s
+<strong>lm()</strong></p></li>
+<li><p><strong>qeLinKNN()</strong>: first fits <strong>qeLin()</strong>,
+followed by k-NN on the residuals to correct deviations from
+linearity</p></li>
+<li><p><strong>qeLogit()</strong>: wraps R’s
+<strong>glm()</strong></p></li>
+<li><p><strong>qeNCVregCV</strong>: wraps <strong>ncvreg</strong>
+package, linear gen. linear regression regularized via SCAD
+etc.</p></li>
+<li><p><strong>qeNeural()</strong>: wraps <strong>keras</strong>
+package, including CNN</p></li>
+<li><p><strong>qePolyLASSO()</strong>: LASSO/ridge applied to polynomial
+regression; wraps <strong>glmnet</strong>, <strong>polyreg</strong>
+pkgs</p></li>
+<li><p><strong>qePolyLin()</strong>: polynomial regression on linear
+models; uses Moore-Penrose inverse if overfitting; wraps
+<strong>polyreg</strong> pkg</p></li>
+<li><p><strong>qePolyLog()</strong>: polynomial regression on logistic
+models; wraps <strong>polyreg</strong> pkg</p></li>
+<li><p><strong>qeRF()</strong>: random forests, wraps
+<strong>randomforest</strong> pkg</p></li>
+<li><p><strong>qeRFgrf</strong>: random forests, wraps
+<strong>grf</strong> pkg; allows linear interpolation within a
+bin</p></li>
+<li><p><strong>qeRpart()</strong>: decision trees, wraps
+<strong>Rpart</strong> pkg; colorful tree plot</p></li>
+<li><p><strong>qeRFranger()</strong>: random forests, wraps
+<strong>ranger</strong> pkg</p></li>
+<li><p><strong>qeskRF()</strong>: random forests, wraps Python
+<strong>Scilearn</strong> pkg</p></li>
+<li><p><strong>qeskSVM()</strong>: SVM, wraps Python
+<strong>Scilearn</strong> pkg</p></li>
+<li><p><strong>qeSVM()</strong>: SVM, wraps <strong>e1071</strong>
+pkg</p></li>
+<li><p><strong>qeSVMliquid()</strong>: SVM, wraps <strong>liquid
+SVM</strong> pkg</p></li>
+<li><p><strong>qeXGBoost()</strong> wraps the <strong>xgboost</strong>
+pkg</p></li>
+</ul></li>
+<li><p><em>feature importance/selection</em></p>
+<ul>
+<li><p><strong>qeFOCI(), qeFOCIrand()</strong>: fully nonparametric
+method for feature selection</p></li>
+<li><p><strong>qeLASSO()</strong>: for feature importance, apply
+<strong>coef()</strong> to return value</p></li>
+<li><p><strong>qeLeaveOut1Var</strong>: fits full model, then with all
+features but 1, for each feature, reporting difference in predictive
+power; use with any <strong>qeML</strong> predictive function</p></li>
+<li><p><strong>qeRareLevels()</strong>: investigates whether rare levels
+of a feature that is an R factor should be included</p></li>
+<li><p><strong>qeRFranger</strong>: <strong>variable.importance</strong>
+component of return value</p></li>
+</ul></li>
+<li><p><em>model development</em></p>
+<ul>
+<li><p><strong>doubleD()</strong>: computation and plotting for
+exploring Double Descent</p></li>
+<li><p><strong>plotClassesUMAP()</strong>: plot first two UMAP
+components, color-coding classes</p></li>
+<li><p><strong>plotPairedResiduals()</strong>: plot residuals against
+pairs of features</p></li>
+<li><p><strong>qeCompare()</strong>: compare the accuracy various ML
+methods on a given dataset</p></li>
+<li><p><strong>qeFT()</strong>: automated grid hyperparameter search,
+<em>with Bonferroni-Dunn corrected standard errors</em></p></li>
+<li><p><strong>qePCA()</strong>: find principal components, number
+specified by user, then fit the resulting model, according to
+<strong>qe</strong>* function specified by user</p></li>
+<li><p><strong>qeROC()</strong>: ROC computation and plotting, wraps
+<strong>pROC</strong> pkg</p></li>
+<li><p><strong>qeUMAP()</strong>: same as <strong>qePCA()</strong> but
+using UMAP</p></li>
+<li><p><strong>replicMeans()</strong>: (from <strong>regtools</strong>,
+included in <strong>qeML</strong>) averages output,
+e.g. <strong>testAcc</strong>, over many holdout sets</p></li>
+</ul></li>
+<li><p><em>application-specific functions (elementary)</em></p>
+<ul>
+<li><p><strong>qeText()</strong> text classification</p></li>
+<li><p><strong>qeTS():</strong> time series</p></li>
+</ul></li>
+<li><p><em>prediction with missing values</em></p>
+<ul>
+<li><strong>qeLinMV()</strong>, <strong>qeLogitMV()</strong>,
+<strong>qeKNNMV()</strong>, associated <strong>predict()</strong>
+generics for use with <strong>toweranNA</strong> pkg</li>
+</ul></li>
+<li><p><em>utilities, exploratory tools</em></p>
+<ul>
+<li><p><strong>cartesianFactor()</strong>: with inputs of R factors of
+n1, n2… levels, creates a combined “superfactor” of n1<em>n2</em>…
+levels</p></li>
+<li><p><strong>dataToTopLevels()</strong>: applies
+<strong>factorToTopLevels()</strong> to all fadtors in the given data
+frame</p></li>
+<li><p><strong>factorToTopLevels()</strong>: removes rare levels from a
+factor</p></li>
+<li><p><strong>levelCounts()</strong>: performs a census of levels for
+each R factor in the dataset</p></li>
+<li><p><strong>newDFRow()</strong>: creates a new case to input to
+<strong>predict()</strong></p></li>
+<li><p><strong>qeParallel()</strong>: apply “Software Alchemy” to
+parallelize <strong>qe</strong> functions</p></li>
+</ul></li>
+</ul>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

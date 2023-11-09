@@ -1,0 +1,69 @@
+
+importFrom("graphics", 'hist', "abline", "matplot", "plot", "lines")
+importFrom("stats", 'as.formula', "binomial", "coef", "cor", "cov", "glm", "lm",
+             "loglin", "na.omit", "numericDeriv", "predict", "rbinom",
+             "var", "loess")
+importFrom('regtools','kNN', 'allNumeric', 'factorToDummies', 'charsToFactors',    'krsFit', 'penrosePoly', 'hasFactors', 'getDFclasses',
+    'confusion', 'fineTuning', 'mmscale')
+
+importFrom('grf','regression_forest','ll_regression_forest')
+
+importFrom('gbm','gbm.perf')
+
+import('FOCI','gtools','partools','rmarkdown',rpart,rpart.plot)
+
+importFrom("stats", "runif", 'reshape')
+
+importFrom('tufte','tufte_html')
+
+S3method(predict,qeLogit)
+S3method(predict,qeLin)
+S3method(predict,qeKNN)
+S3method(predict,qeRF)
+S3method(predict,qeRFranger)
+S3method(predict,qeRFgrf)
+S3method(predict,qeSVM)
+S3method(predict,qeGBoost)
+S3method(predict,qeAdaBoost)
+S3method(predict,qeNeural)
+S3method(predict,qePolyLin)
+S3method(predict,qePolyLog)
+S3method(predict,qeLASSO)
+S3method(predict,qeDT)
+S3method(predict,qeParallel)
+S3method(predict,qeDeepnet)
+S3method(plot,qeLASSO)
+S3method(plot,qeRF)
+S3method(plot,qeDT)
+S3method(plot,qeFT)
+S3method(plot,doubleD)
+S3method(plot,qeNCVregCV)
+S3method(plot,qeRpart)
+S3method(print,qeDT)
+S3method(predict,qeRpart)
+S3method(predict,qePolyLASSO)
+S3method(predict,qePCA)
+S3method(predict,qeUMAP)
+S3method(predict,qeTS)
+S3method(predict,qeText)
+S3method(predict,qeLightGBoost)
+S3method(predict,qeLinKNN)
+S3method(predict,qePolyLinKNN)
+S3method(predict,qeXGBoost)
+S3method(predict,qeNCVregCV)
+S3method(predict,qeLinMV)
+S3method(predict,qeLogitMV)
+S3method(predict,qeKNNMV)
+
+export(
+   qePCA,qeUMAP,qeRF,qeRFgrf,qeRFranger,qeDT,
+   qeLogit,qeLin,qeKNN,qeSVM,qeGBoost,qeAdaBoost,
+   qeNeural,qeLASSO,qeCompare,qeFT,qeROC,qeNCVregCV,
+   qePolyLin,qePolyLog,qePolyLASSO,qePolyLinKNN,
+   qeParallel,qeTS,qeText,qeLightGBoost,qeXGBoost,
+   doubleD,qeFOCI,qeFOCIrand,qeLinKNN,qeDeepnet,
+   plotClassesUMAP,plotPairedResids,factorToTopLevels,
+   levelCounts,dataToTopLevels,checkPkgLoaded,
+   qeLinMV,qeLogitMV,qeKNNMV,qeLeaveOut1Var,qeRpart,
+   cartesianFactor,newDFRow,qeRareLevels,
+   qeFreqParcoord,buildQEcall,evalr,qeFOCImult)

@@ -1,0 +1,408 @@
+
+---
+title: "Overfitting"
+output: 
+   rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Overfitting}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Clearing the Confusion:  a Closer Look at Overfitting
+
+The concept of overfitting is often mentioned in prediction
+applications, but often in vague terms.  Let's see what is really
+occurring.
+
+# Preparation
+
+## Goals
+
+Explanations of overfitting in machine learning tend to be frustratingly
+vague.  We for instance hear "An overfitted model predicts poorly on new
+examples," which is a definition, not an explanation.  Or we hear that
+overfitting results from "fitting the training data too well" or that we
+are "fitting the noise," again rather unsatisfying.
+
+Somewhat better--but only somewhat--are the explanations based on the
+famous Bias-Variance Tradeoff.  The latter is the mathematical
+relationship,
+
+> mean squared prediction error (MSPE) = squared bias + variance
+
+The narrative is then:
+
+> Bias and variance are at odds with each other.  The lower the bias, the
+> more the variance.  As we move through a sequence of models of
+> increasing complexity, eventually the reduction in bias is overwhlemed
+> by the increase in variance, a net loss.  Somewhere in that sequence
+> of models is a best one, i.e. one with minimum MSPE.
+
+OK, but the bias and variance of WHAT?  Our treatment here is based on
+that notion, **with emphasis on what it is that we are really
+talking about** in discussing bias and variance.
+
+## Required Background
+
+Only very basic statistical concepts are needed, plus patience (document
+is a bit long).  
+
+## Setting and Notation
+
+Let Y denote our outcome variable, and X represent the vector of our
+predictors/features.  We are predicting Y from X.  For instance, Y might
+be human weight, with X being (height, age).  We include binary
+classification problems, with Y = 1 or 0, coding the "yes" class and
+"no" class.  
+In multiclass settings with c classes, Y is
+a vector of c 1s and 0s, with only one component being equal to 1 at a time.
+
+We denote by n and p the number of rows and columns in our training
+data.
+
+Overfitting is often described as arising when we go too far towards the
+low-bias end of the Bias-Variance Tradeoff.  Yes, but what does that
+really mean in the prediction context?
+
+</br>
+</br>
+
+# The "True" Relation between Y and X
+
+The *regression function of Y on X*, &rho;(t), is defined to be the mean
+Y for the given X values t.  In the weight/height/age example,
+&rho;(68.2,32.9) is the mean weight of all people of height 68.2 and age
+32.9.   
+Though some books use the term "regression" to mean a linear model, the
+actual definition is unrestricted; it applies just as much to, say,
+random forests as to linear models.
+
+The &rho; function is the best (i.e. minimum MSPE) predictor of weight
+based on height and age, the ideal.  Note the phrase "based on," though.
+If we had a third predictor variable/feature available, say waist size,
+there would be another &rho; function for that 3-predictor setting,
+possibly better than the 2-predictor one.
+
+Note too that the &rho; function is a population entity, which we estimate
+from our sample data.  Denote the estimated &rho;(t) by r(t).  Say we
+are studying diabetic people.  &rho;(t) gives us the relation of weight
+vs.  height and age in the entire population of diabetics; if our study
+involves 100 patients, that is considered a sample from that population,
+and our estimate r(t) is based on that sample.
+Note:  "Sample" will mean our entire dataset; we will say, "A sample of 100
+people," as in statistics courses, not "We have 100 samples," the
+machine learning term.
+
+The term *population* is used in the statistics community.  Those who
+come to ML from the computer science world tend to use terms like
+*probabilistic generating process*.  Either way, it is crucial to keep
+in mind that we treat our data as randomly generated.  If our data
+consists of 100 diabetes patients, we treat them as being randomly drawn
+from the conceptual population of all diabetics.
+
+For those with some background in probability theory:  We are modeling the
+conditional distribution of Y given X, so we can regard the X columns in
+our dataset as fixed but the Y column as random.
+
+In a binary classification problem, the regression function reduces to the
+probability of class 1, since the mean of a 0,1 variable is the
+probability of a 1.
+
+## Example: estimating the &rho; function via a linear model 
+
+Say we use a linear model to predict weight from height, i.e. our model
+for &rho;(height) is
+
+&rho;(weight) = mean weight = &beta;<sub>0</sub> + &beta;<sub>1</sub> height
+
+This is called a "parametric" model, in that it expresses &rho;(t) in terms
+of some parameters, in this case the &beta;<sub>i</sub>.
+
+Our sample-based estimate of the function &rho;(t) is a function r(t),
+with
+
+r(height) = mean weight = b<sub>0</sub> + b<sub>1</sub> height
+
+The b<sub>i</sub>, say computed using the familiar least-squares method,
+are the sample estimates of the &beta;<sub>i</sub>.
+
+## Example: estimating the &rho; function via a k-NN model 
+
+It will be convenient here to use as our nonparametric method the
+classic k-Nearest Neighbors approach.  To estimate &rho;(t), we find the
+k closest rows in our dataset to t, and average the Y values of those
+data points.  Of course, k is a hyperparameter, chosen by the analyst.
+
+Other machine learning methods, such as random forests, SVM and neural
+nets, have similar problems to what we discuss below, so k-NN will be
+our main nonparametric example.
+
+</br>
+</br>
+
+# Bias and Variance of WHAT
+
+It's very easy to drop terms like "Bias-Variance Tradeoff" into a
+discussion, but what does it really mean?  We'll explain here, mainly
+with linear model examples, but bring in k-NN later.
+
+## Bias in prediction
+
+Though the reader may have seen the concept of statistical bias in terms
+of simple estimators, our context here is different.  Let's take as
+our example prediction of house prices, say using the predictor
+variables Square Feet and Location.
+Prediction methods are often used in real estate contexts, such as in
+assessing market value.
+
+Generally, the larger a home is, the greater its value.  But the
+same-sized home will have a higher value in some places than others.
+In other words,
+
+> If we predict the price of a house based only on size and decline to
+> use (or do not know) its location, we induce a bias.  If say the house is
+> in an expensive neighborhood, our prediction based only on Square Feet
+> will likely be too low.
+
+We can write this as, for a specific case,
+
+````{verbatim} 
+   average(actual value - 
+      predicted value from size alone, 
+      given size=2125, location='Seaside') > 0 
+````
+
+That average discrepancy is called the *bias*.  Here the bias will be
+positive for the houses in expensive neighborhoods, and negative for
+those in inexpensive areas.
+Note that, negative or positive, the impact on MSPE is the same, since
+the latter involves *squared* bias.
+
+Note that "average" here means the mean over all possible houses of the
+given size and place.  In some cases, we may not underpredict, but on
+average we will do so.  
+
+## Variance in prediction
+
+This refers to sampling variance, which measures the degree of
+instability of one's estimated r(t) from one training dataset to another.
+E.g. in the above linear model, there will the variation of the 
+b<sub>i</sub> from one sample to another, thus causing variation in 
+r(t) among samples.
+
+The key point is:
+
+> The more complex our model, the higher the variance of its fit to the
+> data.
+
+Let's illustrate this with the **pef** dataset, included with the
+**qeML** package:
+
+``` r
+> data(pef)
+> head(pef)
+       age     educ occ sex wageinc wkswrkd
+1 50.30082 zzzOther 102   2   75000      52
+2 41.10139 zzzOther 101   1   12300      20
+3 24.67374 zzzOther 102   2   15400      52
+4 50.19951 zzzOther 100   1       0      52
+5 51.18112 zzzOther 100   2     160       1
+6 57.70413 zzzOther 100   1       0       0
+```
+
+Let's start with a very simple model, predicting wage income from number of
+weeks worked:
+
+``` r
+> zWeeks <- lm(wageinc ~ wkswrkd,pef))
+> coef(zWeeks)
+(Intercept)     wkswrkd 
+  -2315.625    1387.481 
+```
+
+So, our predicted income of someone who works 45 weeks would be
+
+   -2315.625 + 1387.481 x 45
+
+But again, the predicted value varies from one training 
+dataset to another.  One can
+show that its estimated variance is as follows:
+
+``` r
+> c(1,45) %*% vcov(zWeeks) %*% c(1,45)
+         [,1]
+[1,] 98016.11
+```
+
+Now let's fit a somewhat more complex model, including age:
+
+``` r
+zWeeksAge <- lm(wageinc ~ wkswrkd+age,pef)
+> coef(zWeeksAge)
+(Intercept)     wkswrkd         age 
+-22097.8721   1388.9398    498.5047 
+```
+
+Say we predict the income of a worker who worked 45 weeks and is age 26.
+The estimated variance of our prediction is now
+
+``` r
+> c(1,45,26) %*% vcov(zWeeksAge) %*% c(1,45,26)
+         [,1]
+[1,] 237114.2
+```
+
+So, adding just one more feature led to a dramatic increase in variance.
+Again, note that this reflects the sampling variation in the b<sub>i</sub>
+from one dataset to another.
+
+This may be difficult to accept for some, who may ask, "Why does
+sampling variation matter?  We have only one sample." The point is that
+if sampling variance is low, say, then most samples produce b<sub>i</sub>
+that are near the true &beta;<sub>i</sub>, giving us confidence that
+our particular sample is of that nature.  It's just like playing a game
+in a casino; we may play the game just once, but we will still want to know
+the probability of winning--i.e. the proportion of wins among many
+plays--before deciding to gamble.
+
+Roughly speaking:
+
+> For a fixed number of rows in our data, a prediction
+> using more columns will have smaller bias but larger variance.  This
+> is the Bias-Variance Tradeoff.
+
+## What about k-NN?
+
+Opposing effects on bias and variance definitely arise here (and in any
+other ML method).  The above analysis involving the number of predictors
+has a similar effect here, but let's look at the effect of k instead:
+
+* **Bias:** Say Y = weight, X = height, and k is rather large.  Suppose
+  we need to predict the weight of a very tall person.  A problem arises
+  in that most of the training data points in the k-neighborhood of this
+  tall person will be shorter than him/her--thus lighter.  So, when we
+  average the weights of the neighborhs to get our predicted weight for
+  the new person, we are likely to be too low, a positive bias.  A
+  negative basis can occur analogously.  Smaller k values are thus
+  desirable.
+
+* **Variance:** As we know from statistics, the variance of a sample
+  mean is the population variance divided by the number of terms being
+  averaged.  In other words, variance will be proportional to 1/k.
+  Larger k values are thus desirable.
+
+So, again, we see bias and variance at odds with each other.
+
+<br> 
+<br> 
+
+# Where Is the "Goldilocks" Level of Complexity?
+
+For any dataset and predictive algorithm, there is some optimal level of
+complexity--optimal feature set, optimal k etc.--which achieves minimum MSPE.
+Let's take a look.  First, a very important principle.
+
+Other measures than MSPE might be used.  An analog of the neat
+bias<sup>2</sup>+variance formulation would not exist, but the 
+same general principles would hold.
+
+## Dependency on n
+
+> The larger n is, the higher level of complexity is optimal
+
+## A U-shaped curve
+
+Mean squared error is the sum of a decreasing quantity, squared bias,
+and an increasing quantity, variance.  This typically produces a
+U-shape, but there is no inherent reason that it must come out this way.
+A double-U can occur (see below), or for that matter, multiple-U. 
+
+## Cross-validation
+
+Again, MSPE is a population quantity, but we can estimate it via
+cross-validation.  For instance, for each value of k in a range, we can
+fit k-NN on our training data and the estimate the corresponding
+MSPE value by predicting our test set.
+
+</br>
+</br>
+
+# Overfitting with Impunity--and Even Gain?
+
+Research in machine learning has, among other things, produced two major
+mysteries, which we discuss now.
+
+## Baffling behavior--drastic overfitting
+
+In many ML applications, especially those in which neural networks are
+used, there may be far more hyperparameters than data points.
+Yet excellent prediction accuracy on new data has often been
+reported in spite of such extreme overfitting.
+
+## How could it be possible?
+
+Much speculation has been made as to why this phenomenon can occur.  My
+own speculation is as follows.
+
+* **These phenomena occur in classification problems in which there is a
+very low error rate, 1 or 2% or even under 1%.**  
+
+* In other words, the classes are widely separated, i.e. there is a
+  *large margin* in the SVM sense.  Thus a large amount of variance 
+  can be tolerated in the fitted model, and there is room for
+  myriad high-complexity functions that separate the classes perfectly
+  or nearly so, even for test data.
+
+* Thus there are myriad fits that will achieve 0 training error, and the
+  iterative solution method used by ML methods such as neural networks
+  is often of a nature that the *minimum norm* solution is arrived at.
+  In other words, of the ocean of possible 0-training error solutions,
+  this one is smallest, which intuitively suggests that it is of small
+  variance.  This may produce very good test error.
+
+Here is an example, using a famous image recognition dataset
+(generated by code available [here](https://jlmelville.github.io/uwot/metric-learning.html):
+
+![UMAP plot](UMAPFMNIST.png)
+
+There are 10 classes, each shown in a different color.  Here the UMAP
+method (think of it as a nonlinear PCA) was applied for dimension
+reduction, shown to dimension 2 here.  There are some isolated points here and
+there, but almost all the data is separated into 10 "islands."  Between
+any two islands, there are tons of high-dimensonal curves, say high-degree
+polynomials, that one can fit to separate them.  So we see that
+overfitting is just not an issue, even with high-degree polynomials.
+
+
+## Baffling behavior--"double descent"
+
+The phenomenon of *double descent* is sometimes observed, in which the
+familiar graph of test set accuracy vs. model complexity consists of
+*two* U shapes rather than one.  The most intriguing cases are those in
+which the first U ends at a point where the model fully interpolates the
+training data, i.e. 0 training error--and yet *even further* complexity
+actually reduces test set error, with the minimum of the second U being
+smaller than the first..
+
+## How could it be possible?
+
+The argument explaining double descent generally made by researchers in
+this field is actually similar to the argument I made for the
+"overfitting with impunity" analysis above, regarding minimum-norm
+estimators.  
+
+By the way, the function **penroseLM()** in the regtools package (on
+top of which qeML is built) does find the minimum-norm b in the case of
+overfitting a linear model.  As mentioned, this has been observed
+empirically, and some theoretical work has proved it under certain
+circumstances.
+
+
